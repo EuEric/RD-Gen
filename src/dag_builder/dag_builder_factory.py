@@ -4,6 +4,7 @@ from .chain_based_builder import ChainBasedBuilder
 from .dag_builder_base import DAGBuilderBase
 from .fan_in_fan_out_builder import FanInFanOutBuilder
 from .g_n_p_builder import GNPBuilder
+from .fork_join_builder import ForkJoinBuilder
 
 
 class DAGBuilderFactory:
@@ -17,6 +18,7 @@ class DAGBuilderFactory:
         - Fan-in/fan-out method (see https://hal.archives-ouvertes.fr/hal-00471255/file/ggen.pdf)
         - G(n, p) method (see https://hal.archives-ouvertes.fr/hal-00471255/file/ggen.pdf)
         - Chain-based method
+        - Fork-join method 
 
         Parameters
         ----------
@@ -41,5 +43,7 @@ class DAGBuilderFactory:
             return GNPBuilder(config)
         elif Util.ambiguous_equals(generation_method, "chain-based"):
             return ChainBasedBuilder(config)
+        elif Util.ambiguous_equals(generation_method, "fork-join"):
+            return ForkJoinBuilder(config)
         else:
             raise NotImplementedError

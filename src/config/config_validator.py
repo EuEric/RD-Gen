@@ -17,6 +17,7 @@ class ConfigValidator:
                     Regex("Fan-in/Fan-out", flags=re.I),
                     Regex(r"G\(n,[ ]*p\)", flags=re.I),
                     Regex("Chain-based", flags=re.I),
+                    Regex("Fork-join", flags=re.I),
                 ),
                 Optional(Regex("Number of nodes", flags=re.I)): Or(
                     {Regex("Fixed", flags=re.I): int},
@@ -109,6 +110,7 @@ class ConfigValidator:
                     Regex("Index of combination", flags=re.I),
                 ),
                 Regex("DAG", flags=re.I): {
+                    Optional(Regex("RAY_YAML", flags=re.I)): bool,
                     Optional(Regex("YAML", flags=re.I)): bool,
                     Optional(Regex("JSON", flags=re.I)): bool,
                     Optional(Regex("XML", flags=re.I)): bool,
@@ -154,6 +156,24 @@ class ConfigValidator:
                     {Regex("Combination", flags=re.I): Or([int], str)},
                 ),
                 Regex("Out-degree", flags=re.I): Or(
+                    {Regex("Fixed", flags=re.I): int},
+                    {Regex("Random", flags=re.I): Or([int], str)},
+                    {Regex("Combination", flags=re.I): Or([int], str)},
+                ),
+            }
+        },
+        ignore_extra_keys=True,
+    )
+    
+    fork_join_schema = Schema(
+        {
+            Regex("Graph structure", flags=re.I): {
+                Regex("Nr-fork", flags=re.I): Or(
+                    {Regex("Fixed", flags=re.I): int},
+                    {Regex("Random", flags=re.I): Or([int], str)},
+                    {Regex("Combination", flags=re.I): Or([int], str)},
+                ),
+                Regex("Fork-depth", flags=re.I): Or(
                     {Regex("Fixed", flags=re.I): int},
                     {Regex("Random", flags=re.I): Or([int], str)},
                     {Regex("Combination", flags=re.I): Or([int], str)},
@@ -237,3 +257,5 @@ class ConfigValidator:
             self.g_n_p_schema.validate(self._config_raw)
         elif Util.ambiguous_equals(gm, "chain-based"):
             self.chain_based_schema.validate(self._config_raw)
+        elif Util.ambiguous_equals(gm, "fork-join"):
+            self.fork_join_schema.validate(self._config_raw)

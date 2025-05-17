@@ -2,6 +2,8 @@ TO_ABB = {
     "probability of edge existence": "PE",
     "in-degree": "ID",
     "out-degree": "OD",
+    "nr-fork": "NF",
+    "fork-depth": "FD",
     "number of nodes": "NN",
     "number of chains": "NC",
     "main sequence length": "MSL",

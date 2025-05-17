@@ -7,6 +7,11 @@ from networkx.readwrite import json_graph
 
 from ..config import Config
 
+class IndentDumper(yaml.Dumper):
+    """Class used to increase the intendation of YAML dump"""
+    def increase_indent(self, flow=False, indentless=False):
+        return super(IndentDumper, self).increase_indent(flow, False)
+
 
 class DAGExporter:
     """DAG exporter class."""
@@ -30,6 +35,30 @@ class DAGExporter:
         self._export_dag(dag, dest_dir, file_name)
         if self._config.figure:
             self._export_fig(dag, dest_dir, file_name)
+            
+    def _export_dag_custom_yaml(self, graph_data) -> None:
+        custom_export = {
+            "vertices": [],
+            "edges": [],
+            "indirect_edges": []
+        }
+
+        # Change 'nodes' to 'vertices' and rename fields
+        for node in graph_data.get("nodes", []):
+            custom_export["vertices"].append({
+                "id": node["id"],
+                "c": node["execution_time"]
+            })
+
+        # Change 'links' to 'edges' and rename fields
+        for link in graph_data.get("links", []):
+            custom_export["edges"].append({
+                "from": link["source"],
+                "to": link["target"]
+            })
+
+        # Only return a single dag for now
+        return { "dags": custom_export }
 
     def _export_dag(self, dag: nx.DiGraph, dest_dir: str, file_name: str) -> None:
         """Export DAG description file.
@@ -46,6 +75,14 @@ class DAGExporter:
             File name.
 
         """
+        if self._config.ray_yaml:
+            data = self._export_dag_custom_yaml(json_graph.node_link_data(dag))
+
+            s = json.dumps(data)
+            dic = json.loads(s)
+            with open(f"{dest_dir}/{file_name}.yaml", "w") as f:
+                yaml.dump(dic, f, Dumper=IndentDumper)
+        
         if self._config.yaml:
             data = json_graph.node_link_data(dag)
             s = json.dumps(data)

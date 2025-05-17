@@ -95,6 +95,22 @@ class Config:
     @in_degree.setter
     def in_degree(self, value):
         self.graph_structure["In-degree"] = value
+        
+    @property
+    def nr_fork(self):
+        return self.graph_structure.get("Nr-fork")
+    
+    @nr_fork.setter
+    def nr_fork(self, value):
+        self.graph_structure["Nr-fork"] = value
+
+    @property
+    def fork_depth(self):
+        return self.graph_structure.get("Fork-depth")
+    
+    @fork_depth.setter
+    def fork_depth(self, value):
+        self.graph_structure["Fork-depth"] = value
 
     @property
     def probability_of_edge_existence(self):
@@ -360,6 +376,10 @@ class Config:
     def naming_of_combination_directory(self):
         return self.output_formats.get("Naming of combination directory")
 
+    @property
+    def ray_yaml(self):
+        return self.output_formats["DAG"].get("RAY_YAML")
+     
     @property
     def yaml(self):
         return self.output_formats["DAG"].get("YAML")

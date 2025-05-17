@@ -8,6 +8,7 @@ __all__ = [
     "DAGBuilderFactory",
     "DAGBuilderBase",
     "FanInFanOutBuilder",
+    "ForkJoinBuilder"
     "GNPBuilder",
     "Chain",
     "ChainBasedBuilder",

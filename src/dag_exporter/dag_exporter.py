@@ -37,6 +37,7 @@ class DAGExporter:
             self._export_fig(dag, dest_dir, file_name)
             
     def _export_dag_custom_yaml(self, graph_data) -> None:
+        """Custom export to fit our format for parsing Ray DAG YAML"""
         custom_export = {
             "vertices": [],
             "edges": [],
@@ -50,12 +51,18 @@ class DAGExporter:
                 "c": node["execution_time"]
             })
 
-        # Change 'links' to 'edges' and rename fields
+        # Split edges into regular and indirect based on 'indirect' attribute and rename fields
         for link in graph_data.get("links", []):
-            custom_export["edges"].append({
+            print(link)
+            edge_data = {
                 "from": link["source"],
                 "to": link["target"]
-            })
+            }
+            if link.get("indirect"):
+                print("indirect edge detected")
+                custom_export["indirect_edges"].append(edge_data)
+            else:
+                custom_export["edges"].append(edge_data)
 
         # Only return a single dag for now
         return { "dags": custom_export }

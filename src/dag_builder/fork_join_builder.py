@@ -31,7 +31,7 @@ class ForkJoinBuilder(DAGBuilderBase):
             )
 
     def build(self) -> Generator:
-        """Build a DAG using recursive fork-join pattern."""
+        """Build a DAG using recursive fork-join pattern with multiple source nodes."""
         for _ in range(self._config.number_of_dags):
             G = nx.DiGraph()
             node_counter = [0]  # Mutable integer for unique node IDs
@@ -62,15 +62,35 @@ class ForkJoinBuilder(DAGBuilderBase):
                 for leaf in leaf_nodes:
                     G.add_edge(leaf, join_node)
 
+                # Add indirect edge using label
+                G.add_edge(entry, join_node, indirect=True)
+
+                
                 return join_node  # Return join as output of this level
 
-            # Create entry node
-            entry_node = 0
-            G.add_node(entry_node)
+            # Add source node(s) and build (sub)graphs
+            num_sources = Util.get_option_min(self._config.number_of_source_nodes) or 1
+            final_outputs = []
 
-            final_output = recursive_fork_join(entry_node, self._max_fork_depth)
+            for _ in range(num_sources):
+                source_node = next_node_id()
+                G.add_node(source_node)
+                final_output = recursive_fork_join(source_node, self._max_fork_depth)
+                final_outputs.append(final_output)
+                
+            #TODO: make this better and transform source and sink to have zero wcet
 
-            # Optional: Add final sink node
+            # Join all final outputs into a single merge node
+            if len(final_outputs) > 1:
+                merge_node = next_node_id()
+                G.add_node(merge_node)
+                for output_node in final_outputs:
+                    G.add_edge(output_node, merge_node)
+                final_output = merge_node
+            else:
+                final_output = final_outputs[0]
+
+            # Add optional sink node(s)
             if self._config.number_of_sink_nodes:
                 num_sinks = Util.random_choice(self._config.number_of_sink_nodes)
                 for _ in range(num_sinks):

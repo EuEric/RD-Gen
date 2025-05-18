@@ -81,7 +81,7 @@ class DAGExporter:
                 custom_export["edges"].append(edge_data)
 
         # Only return a single dag for now
-        return { "dags": custom_export }
+        return { "dags": [custom_export] }
 
     def _export_dag(self, dag: nx.DiGraph, dest_dir: str, file_name: str) -> None:
         """Export DAG description file.

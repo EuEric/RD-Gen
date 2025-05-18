@@ -37,7 +37,7 @@ class ForkJoinBuilder(DAGBuilderBase):
         """Build a DAG using recursive fork-join pattern with multiple source nodes."""
         for _ in range(self._config.number_of_dags):
             G = nx.DiGraph()
-            node_counter = [0]  # Mutable integer for unique node IDs
+            node_counter = [-1]  # Mutable integer for unique node IDs, ensure source starts with zero
 
             def next_node_id():
                 node_counter[0] += 1

@@ -18,6 +18,15 @@ class DAGExporter:
 
     def __init__(self, config: Config) -> None:
         self._config = config
+        
+    def _change_source_sink_wcet(self, dag: nx.DiGraph) -> nx.DiGraph:
+        """Sets source and sink nodes/vertices to have zero WCET, as we dont use them in our analysis"""
+        for node in dag.nodes:
+            vertex = dag.nodes[node]
+            if vertex.get("type") == "source" or  vertex.get("type") == "sink":
+                vertex["execution_time"] = 0    
+        return dag
+
 
     def export(self, dag: nx.DiGraph, dest_dir: str, file_name: str) -> None:
         """Export DAG.
@@ -32,6 +41,10 @@ class DAGExporter:
             File name.
 
         """
+        # Overwrite source and sink nodes to have zero WCET
+        if self._config.ray_yaml:
+           dag = self._change_source_sink_wcet(dag)
+            
         self._export_dag(dag, dest_dir, file_name)
         if self._config.figure:
             self._export_fig(dag, dest_dir, file_name)
@@ -43,9 +56,14 @@ class DAGExporter:
             "edges": [],
             "indirect_edges": []
         }
+        # dag.nodes[node_i][property_name] = Util.random_choice(option)
+        # print(graph_data)
 
         # Change 'nodes' to 'vertices' and rename fields
         for node in graph_data.get("nodes", []):
+            # Alter source and sink nodes to have zero WCET
+            if node.get("type") == "source" or  node.get("type") == "sink":
+                node["execution_time"] = 0
             custom_export["vertices"].append({
                 "id": node["id"],
                 "c": node["execution_time"]
@@ -53,13 +71,11 @@ class DAGExporter:
 
         # Split edges into regular and indirect based on 'indirect' attribute and rename fields
         for link in graph_data.get("links", []):
-            print(link)
             edge_data = {
                 "from": link["source"],
                 "to": link["target"]
             }
             if link.get("indirect"):
-                print("indirect edge detected")
                 custom_export["indirect_edges"].append(edge_data)
             else:
                 custom_export["edges"].append(edge_data)

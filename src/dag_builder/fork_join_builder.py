@@ -75,10 +75,11 @@ class ForkJoinBuilder(DAGBuilderBase):
             for _ in range(num_sources):
                 source_node = next_node_id()
                 G.add_node(source_node)
+                G.nodes[source_node]["type"] = "source"
                 final_output = recursive_fork_join(source_node, self._max_fork_depth)
                 final_outputs.append(final_output)
                 
-            #TODO: make this better and transform source and sink to have zero wcet
+            #TODO: make this better, to have a controlled method of having nodes
 
             # Join all final outputs into a single merge node
             if len(final_outputs) > 1:
@@ -97,5 +98,6 @@ class ForkJoinBuilder(DAGBuilderBase):
                     sink = next_node_id()
                     G.add_node(sink)
                     G.add_edge(final_output, sink)
+                    G.nodes[sink]["type"] = "sink"
 
             yield G

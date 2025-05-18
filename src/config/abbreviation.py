@@ -4,6 +4,7 @@ TO_ABB = {
     "out-degree": "OD",
     "nr-fork": "NF",
     "fork-depth": "FD",
+    "early-termination-prob": "ETP",
     "number of nodes": "NN",
     "number of chains": "NC",
     "main sequence length": "MSL",

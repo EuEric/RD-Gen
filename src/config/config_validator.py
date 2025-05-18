@@ -178,6 +178,11 @@ class ConfigValidator:
                     {Regex("Random", flags=re.I): Or([int], str)},
                     {Regex("Combination", flags=re.I): Or([int], str)},
                 ),
+                Regex("Early-termination-prob", flags=re.I): Or(
+                    {Regex("Fixed", flags=re.I): float},
+                    {Regex("Random", flags=re.I): Or([float], str)},
+                    {Regex("Combination", flags=re.I): Or([float], str)},
+                ),
             }
         },
         ignore_extra_keys=True,

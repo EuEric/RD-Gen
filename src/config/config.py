@@ -111,6 +111,14 @@ class Config:
     @fork_depth.setter
     def fork_depth(self, value):
         self.graph_structure["Fork-depth"] = value
+        
+    @property
+    def early_termination_prob(self):
+        return self.graph_structure.get("Early-termination-prob")
+    
+    @early_termination_prob.setter
+    def early_termination_prob(self, value):
+        self.graph_structure["Early-termination-prob"] = value
 
     @property
     def probability_of_edge_existence(self):

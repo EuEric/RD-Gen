@@ -20,6 +20,9 @@ class ForkJoinBuilder(DAGBuilderBase):
         self._max_fork = (
             max(config.nr_fork) if isinstance(config.nr_fork, list) else config.nr_fork
         )
+        self._early_termination_prob = (
+            max(config.early_termination_prob) if isinstance(config.early_termination_prob, list) else config.early_termination_prob
+        )
 
     def _validate_config(self, config: Config):
         number_of_source_nodes = Util.get_option_min(config.number_of_source_nodes) or 1
@@ -41,7 +44,8 @@ class ForkJoinBuilder(DAGBuilderBase):
                 return node_counter[0]
 
             def recursive_fork_join(entry: int, depth: int) -> int:
-                if depth == 0:
+                # Early termination, to make shorter branches, random numbers are using seed from input yaml
+                if depth == 0 or random.random() < self._early_termination_prob:
                     return entry  # Base case: return this as a leaf
 
                 # Fork into children

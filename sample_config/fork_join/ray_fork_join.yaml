@@ -1,5 +1,5 @@
 Seed: 0
-Number of DAGs: 5
+Number of DAGs: 6
 
 Graph structure:
   Generation method: "Fork-join"
@@ -13,6 +13,8 @@ Graph structure:
     Fixed: 3
   Nr-fork:
     Fixed: 3
+  Early-termination-prob:
+    Fixed: 0.2
   Ensure weakly connected: True
 
 Properties:

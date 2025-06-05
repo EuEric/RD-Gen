@@ -5,6 +5,8 @@ TO_ABB = {
     "nr-fork": "NF",
     "fork-depth": "FD",
     "early-termination-prob": "ETP",
+    "graph-deadline": "GL",
+    "graph-period": "GP",
     "number of nodes": "NN",
     "number of chains": "NC",
     "main sequence length": "MSL",

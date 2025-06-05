@@ -119,6 +119,22 @@ class Config:
     @early_termination_prob.setter
     def early_termination_prob(self, value):
         self.graph_structure["Early-termination-prob"] = value
+        
+    @property
+    def graph_deadline(self):
+        return self.graph_structure.get("Graph-deadline")
+    
+    @graph_deadline.setter
+    def graph_deadline(self, value):
+        self.graph_structure["Graph-deadline"] = value
+        
+    @property
+    def graph_period(self):
+        return self.graph_structure.get("Graph-period")
+    
+    @graph_period.setter
+    def graph_period(self, value):
+        self.graph_structure["Graph-period"] = value
 
     @property
     def probability_of_edge_existence(self):

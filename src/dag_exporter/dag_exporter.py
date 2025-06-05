@@ -52,12 +52,19 @@ class DAGExporter:
     def _export_dag_custom_yaml(self, graph_data) -> None:
         """Custom export to fit our format for parsing Ray DAG YAML"""
         custom_export = {
+            "d": None,
+            "t": None,
             "vertices": [],
             "edges": [],
             "indirect_edges": []
         }
-        # dag.nodes[node_i][property_name] = Util.random_choice(option)
-        # print(graph_data)
+        
+        # Extract period and deadline if available
+        if self._config.graph_deadline:
+            custom_export["d"] = self._config.graph_deadline
+
+        if self._config.graph_period:
+            custom_export["t"] = self._config.graph_period
 
         # Change 'nodes' to 'vertices' and rename fields
         for node in graph_data.get("nodes", []):
@@ -81,7 +88,7 @@ class DAGExporter:
                 custom_export["edges"].append(edge_data)
 
         # Only return a single dag for now
-        return { "dags": [custom_export] }
+        return { "tasks": [custom_export] }
 
     def _export_dag(self, dag: nx.DiGraph, dest_dir: str, file_name: str) -> None:
         """Export DAG description file.

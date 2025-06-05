@@ -49,7 +49,7 @@ class ForkJoinBuilder(DAGBuilderBase):
                     return entry  # Base case: return this as a leaf
 
                 # Fork into children
-                num_forks = random.randint(2, self._max_fork)
+                num_forks = random.randint(1, self._max_fork)
                 children = []
                 for _ in range(num_forks):
                     child = next_node_id()
@@ -98,10 +98,14 @@ class ForkJoinBuilder(DAGBuilderBase):
             # Add optional sink node(s)
             if self._config.number_of_sink_nodes:
                 num_sinks = Util.random_choice(self._config.number_of_sink_nodes)
-                for _ in range(num_sinks):
-                    sink = next_node_id()
-                    G.add_node(sink)
-                    G.add_edge(final_output, sink)
-                    G.nodes[sink]["type"] = "sink"
+                if num_sinks == 1:
+                    # Final_output marked as sink node
+                    G.nodes[final_output]["type"] = "sink"
+                else:
+                    for _ in range(num_sinks):
+                        sink = next_node_id()
+                        G.add_node(sink)
+                        G.add_edge(final_output, sink)
+                        G.nodes[sink]["type"] = "sink"
 
             yield G

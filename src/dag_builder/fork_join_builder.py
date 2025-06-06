@@ -53,8 +53,6 @@ class ForkJoinBuilder(DAGBuilderBase):
             node_counter = [-1]  # Mutable integer for unique node IDs, ensure source starts with zero
             early_termination_prob = Util.random_choice(self._config.early_termination_prob)
             
-            print(f"Early termination prob: {early_termination_prob}")
-
             def next_node_id():
                 node_counter[0] += 1
                 return node_counter[0]

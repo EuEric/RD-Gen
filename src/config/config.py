@@ -135,6 +135,14 @@ class Config:
     @graph_period.setter
     def graph_period(self, value):
         self.graph_structure["Graph-period"] = value
+        
+    @property
+    def graph_utilization(self):
+        return self.graph_structure.get("Graph-utilization")
+    
+    @graph_utilization.setter
+    def graph_utilization(self, value):
+        self.graph_structure["Graph-utilization"] = value
 
     @property
     def probability_of_edge_existence(self):

@@ -15,10 +15,12 @@ Graph structure:
     Fixed: 3
   Early-termination-prob:
     Combination: [0.1, 0.2, 0.3]
-  Graph-deadline:
-    Fixed: 60
-  Graph-period:
-    Fixed: 60
+  # Graph-deadline:
+  #   Fixed: 60
+  # Graph-period:
+  #   Fixed: 60
+  Graph-utilization:
+    Fixed: 2.2
   Ensure weakly connected: True
 
 Properties:

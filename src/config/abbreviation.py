@@ -7,6 +7,7 @@ TO_ABB = {
     "early-termination-prob": "ETP",
     "graph-deadline": "GL",
     "graph-period": "GP",
+    "graph-utilization": "GU",
     "number of nodes": "NN",
     "number of chains": "NC",
     "main sequence length": "MSL",

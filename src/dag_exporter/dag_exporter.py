@@ -58,13 +58,8 @@ class DAGExporter:
             "edges": [],
             "indirect_edges": []
         }
-        
-        # Extract period and deadline if available
-        if self._config.graph_deadline:
-            custom_export["d"] = self._config.graph_deadline
-
-        if self._config.graph_period:
-            custom_export["t"] = self._config.graph_period
+            
+        volume = 0
 
         # Change 'nodes' to 'vertices' and rename fields
         for node in graph_data.get("nodes", []):
@@ -75,6 +70,16 @@ class DAGExporter:
                 "id": node["id"],
                 "c": node["execution_time"]
             })
+            
+            volume += node["execution_time"]
+            
+        # Extract period and deadline if available
+        if self._config.graph_deadline and self._config.graph_period:
+            custom_export["d"] = self._config.graph_deadline
+            custom_export["t"] = self._config.graph_period
+        else:
+            custom_export["d"] = round(volume / self._config.graph_utilization, 2)
+            custom_export["t"] = round(volume / self._config.graph_utilization, 2)
 
         # Split edges into regular and indirect based on 'indirect' attribute and rename fields
         for link in graph_data.get("links", []):

@@ -26,6 +26,10 @@ class ForkJoinBuilder(DAGBuilderBase):
         number_of_sink_nodes = Util.get_option_min(config.number_of_sink_nodes) or 1
         number_of_nodes = Util.get_option_max(config.number_of_nodes)
         early_termination_prob = Util.get_option_max(config.early_termination_prob)
+        graph_deadline = Util.get_option_max(config.graph_deadline)
+        graph_period = Util.get_option_max(config.graph_period)
+        graph_utilization = Util.get_option_max(config.graph_utilization)
+        
         if number_of_source_nodes + number_of_sink_nodes > number_of_nodes:
             raise InfeasibleConfigError(
                 "'Number of source nodes' + 'Number of sink nodes' > 'Number of nodes'"
@@ -35,13 +39,18 @@ class ForkJoinBuilder(DAGBuilderBase):
             raise InfeasibleConfigError(
                 'Early termination probability exceeds bounds [0,1]'
             )
+        
+        if (graph_utilization and (graph_deadline or graph_period)) or (not graph_utilization and (not graph_deadline or not graph_period)):
+            raise InfeasibleConfigError(
+                'Specify either utilization only, or both deadline and period only'
+            )
+
 
     def build(self) -> Generator:
         """Build a DAG using recursive fork-join pattern with multiple source nodes."""
         for _ in range(self._config.number_of_dags):
             G = nx.DiGraph()
             node_counter = [-1]  # Mutable integer for unique node IDs, ensure source starts with zero
-            
             early_termination_prob = Util.random_choice(self._config.early_termination_prob)
             
             print(f"Early termination prob: {early_termination_prob}")
@@ -58,7 +67,7 @@ class ForkJoinBuilder(DAGBuilderBase):
                     return entry  # Only allow early termination after first level
 
                 # Fork into children
-                num_forks = random.randint(1, self._max_fork)
+                num_forks = random.randint(2, self._max_fork)
                 children = []
                 for _ in range(num_forks):
                     child = next_node_id()

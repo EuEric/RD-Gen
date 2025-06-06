@@ -183,16 +183,24 @@ class ConfigValidator:
                     {Regex("Random", flags=re.I): Or([float], str)},
                     {Regex("Combination", flags=re.I): Or([float], str)},
                 ),
-                Regex("Graph-deadline", flags=re.I): Or(
-                    {Regex("Fixed", flags=re.I): int},
-                    {Regex("Random", flags=re.I): Or([int], str)},
-                    {Regex("Combination", flags=re.I): Or([int], str)},
-                ),
-                Regex("Graph-period", flags=re.I): Or(
-                    {Regex("Fixed", flags=re.I): int},
-                    {Regex("Random", flags=re.I): Or([int], str)},
-                    {Regex("Combination", flags=re.I): Or([int], str)},
-                ),
+                Optional(Regex("Graph timing", re.I)): {
+                    Regex("Graph-deadline", flags=re.I): Or(
+                        {Regex("Fixed", flags=re.I): int},
+                        {Regex("Random", flags=re.I): Or([int], str)},
+                        {Regex("Combination", flags=re.I): Or([int], str)},
+                    ),
+                    Regex("Graph-period", flags=re.I): Or(
+                        {Regex("Fixed", flags=re.I): int},
+                        {Regex("Random", flags=re.I): Or([int], str)},
+                        {Regex("Combination", flags=re.I): Or([int], str)},
+                    ),
+                    Regex("Graph-utilization", flags=re.I): Or(
+                        {Regex("Fixed", flags=re.I): float},
+                        {Regex("Random", flags=re.I): Or([float], str)},
+                        {Regex("Combination", flags=re.I): Or([float], str)},
+                    ),
+                },
+
             }
         },
         ignore_extra_keys=True,

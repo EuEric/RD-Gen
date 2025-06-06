@@ -37,8 +37,8 @@ def main(config_path, dest_dir):
     for dir_name, log, config in tqdm(combo_iter, total=num_combo, desc="Generated combinations"):
         combo_dest_dir = f"{dest_dir}/{dir_name}"
         os.mkdir(combo_dest_dir)
-        with open(f"{combo_dest_dir}/combination_log.yaml", "w") as f:
-            yaml.dump(log, f)
+        # with open(f"{combo_dest_dir}/combination_log.yaml", "w") as f:
+        #     yaml.dump(log, f)
 
         dag_builder = DAGBuilderFactory().create_instance(config)
         dag_iter = dag_builder.build()

@@ -20,17 +20,20 @@ class ForkJoinBuilder(DAGBuilderBase):
         self._max_fork = (
             max(config.nr_fork) if isinstance(config.nr_fork, list) else config.nr_fork
         )
-        self._early_termination_prob = (
-            max(config.early_termination_prob) if isinstance(config.early_termination_prob, list) else config.early_termination_prob
-        )
 
     def _validate_config(self, config: Config):
         number_of_source_nodes = Util.get_option_min(config.number_of_source_nodes) or 1
         number_of_sink_nodes = Util.get_option_min(config.number_of_sink_nodes) or 1
         number_of_nodes = Util.get_option_max(config.number_of_nodes)
+        early_termination_prob = Util.get_option_max(config.early_termination_prob)
         if number_of_source_nodes + number_of_sink_nodes > number_of_nodes:
             raise InfeasibleConfigError(
                 "'Number of source nodes' + 'Number of sink nodes' > 'Number of nodes'"
+            )
+            
+        if early_termination_prob > 1.0 or early_termination_prob < 0:
+            raise InfeasibleConfigError(
+                'Early termination probability exceeds bounds [0,1]'
             )
 
     def build(self) -> Generator:
@@ -38,6 +41,10 @@ class ForkJoinBuilder(DAGBuilderBase):
         for _ in range(self._config.number_of_dags):
             G = nx.DiGraph()
             node_counter = [-1]  # Mutable integer for unique node IDs, ensure source starts with zero
+            
+            early_termination_prob = Util.random_choice(self._config.early_termination_prob)
+            
+            print(f"Early termination prob: {early_termination_prob}")
 
             def next_node_id():
                 node_counter[0] += 1
@@ -45,8 +52,10 @@ class ForkJoinBuilder(DAGBuilderBase):
 
             def recursive_fork_join(entry: int, depth: int) -> int:
                 # Early termination, to make shorter branches, random numbers are using seed from input yaml
-                if depth == 0 or random.random() < self._early_termination_prob:
-                    return entry  # Base case: return this as a leaf
+                if depth == 0:
+                    return entry  # Only stop at depth 0
+                if depth < self._max_fork_depth and random.random() < early_termination_prob:
+                    return entry  # Only allow early termination after first level
 
                 # Fork into children
                 num_forks = random.randint(1, self._max_fork)

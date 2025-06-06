@@ -1,5 +1,5 @@
 Seed: 0
-Number of DAGs: 6
+Number of DAGs: 10
 
 Graph structure:
   Generation method: "Fork-join"
@@ -14,7 +14,7 @@ Graph structure:
   Nr-fork:
     Fixed: 3
   Early-termination-prob:
-    Fixed: 0.2
+    Combination: [0.1, 0.2, 0.3]
   Graph-deadline:
     Fixed: 60
   Graph-period:
@@ -39,3 +39,45 @@ Output formats:
     SVG: False
     EPS: False
     PDF: False
+
+# Seed: 0
+# Number of DAGs: 6
+
+# Graph structure:
+#   Generation method: "Fork-join"
+#   Number of nodes:
+#     Random: (6, 14, 1)
+#   Number of source nodes:
+#     Fixed: 1
+#   Number of sink nodes:
+#     Fixed: 1
+#   Fork-depth:
+#     Fixed: 3
+#   Nr-fork:
+#     Fixed: 3
+#   Early-termination-prob:
+#     Fixed: 0.2
+#   Graph-deadline:
+#     Fixed: 60
+#   Graph-period:
+#     Fixed: 60
+#   Ensure weakly connected: True
+
+# Properties:
+#   Execution time:
+#     Random: (1, 10, 1)
+
+# Output formats:
+#   Naming of combination directory: "Abbreviation"
+#   DAG:
+#     RAY_YAML: True
+#     YAML: False
+#     JSON: False
+#     XML: False
+#     DOT: False
+#   Figure:
+#     Draw legend: False
+#     PNG: True
+#     SVG: False
+#     EPS: False
+#     PDF: False

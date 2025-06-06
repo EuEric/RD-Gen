@@ -37,7 +37,7 @@ Output formats:
     DOT: False
   Figure:
     Draw legend: False
-    PNG: True
+    PNG: False
     SVG: False
     EPS: False
     PDF: False

@@ -65,7 +65,8 @@ class ForkJoinBuilder(DAGBuilderBase):
                     return entry  # Only allow early termination after first level
 
                 # Fork into children
-                num_forks = random.randint(2, self._max_fork)
+                # Fonseca 2019 DAG Sched won't work with min num forks = 1, change to 2 if needed
+                num_forks = random.randint(1, self._max_fork)
                 children = []
                 for _ in range(num_forks):
                     child = next_node_id()

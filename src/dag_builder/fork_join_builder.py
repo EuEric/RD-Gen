@@ -22,19 +22,11 @@ class ForkJoinBuilder(DAGBuilderBase):
         )
 
     def _validate_config(self, config: Config):
-        number_of_source_nodes = Util.get_option_min(config.number_of_source_nodes) or 1
-        number_of_sink_nodes = Util.get_option_min(config.number_of_sink_nodes) or 1
-        number_of_nodes = Util.get_option_max(config.number_of_nodes)
         early_termination_prob = Util.get_option_max(config.early_termination_prob)
         graph_deadline = Util.get_option_max(config.graph_deadline)
         graph_period = Util.get_option_max(config.graph_period)
         graph_utilization = Util.get_option_max(config.graph_utilization)
         
-        if number_of_source_nodes + number_of_sink_nodes > number_of_nodes:
-            raise InfeasibleConfigError(
-                "'Number of source nodes' + 'Number of sink nodes' > 'Number of nodes'"
-            )
-            
         if early_termination_prob > 1.0 or early_termination_prob < 0:
             raise InfeasibleConfigError(
                 'Early termination probability exceeds bounds [0,1]'
@@ -99,8 +91,6 @@ class ForkJoinBuilder(DAGBuilderBase):
                 G.nodes[source_node]["type"] = "source"
                 final_output = recursive_fork_join(source_node, self._max_fork_depth)
                 final_outputs.append(final_output)
-                
-            #TODO: make this better, to have a controlled method of having nodes
 
             # Join all final outputs into a single merge node
             if len(final_outputs) > 1:

@@ -1,11 +1,4 @@
 # RD-Gen
-<!-- <p align="center">
-  <img src="https://user-images.githubusercontent.com/55824710/208731888-be3e320a-4148-46cc-983c-f8ee6fe27b9d.png" width="300px">&emsp;&emsp;&emsp;&emsp;<img src="https://user-images.githubusercontent.com/55824710/228999914-af1f5be9-fffe-4b3b-b988-76379389f46b.png" width="420px">
-</p>
-<p align="center">
-  <img src="https://img.shields.io/badge/-Python-F9DC3E.svg?logo=python&style=flat">
-  <img src="https://img.shields.io/badge/-Github-black.svg?logo=github&style=flat"><img src="https://img.shields.io/badge/-pytest passing-gleen.svg">
-</p> -->
 
 ## About
 This code represents a fork of **RD-Gen** from https://github.com/azu-lab/RD-Gen. The tool is used for generating random DAGs using different input parameters. The original fork contains the following functionalities:

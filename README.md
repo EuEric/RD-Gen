@@ -78,3 +78,10 @@ To run any config file, use the `-c` variable, followed by the respective locati
 ## References
 - [1] R. P. Dick, D. L. Rhodes, and W. Wolf. TGFF: task graphs for free. In Proc. of Workshop on CODES/CASHE, 1998.
 - [2] Daniel Cordeiro, Gregory Mounie, Swann Perarnau, Denis Trystram, Jean-Marc Vincent, and Frederic Wagner. Random graph generation for scheduling simulations. In Proc. of SIMUTools, 2010.
+
+## Related code sources
+
+- To generate files containing priorities for the generate Ray DAGs, use the code from https://github.com/EuEric/dag_theory_code.
+- To generate runnable Ray applications from Ray DAGs, use the code from https://github.com/EuEric/ray_code_generator.
+- To compute RT bounds and extract them into `yaml` format, use the code from https://github.com/EuEric/DAG-scheduling.
+
